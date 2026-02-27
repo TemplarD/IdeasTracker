@@ -1,0 +1,41 @@
+{
+  "name": "ideatracker",
+  "version": "1.0.0",
+  "description": "Платформа для краудсорсинга идей",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "docker-compose up -d",
+    "dev:stop": "docker-compose down",
+    "dev:logs": "docker-compose logs -f",
+    "dev:restart": "docker-compose restart",
+    "backend:install": "npm install --prefix backend",
+    "backend:dev": "npm run start:dev --prefix backend",
+    "backend:test": "npm run test --prefix backend",
+    "backend:test:e2e": "npm run test:e2e --prefix backend",
+    "frontend:install": "npm install --prefix frontend",
+    "frontend:dev": "npm run start --prefix frontend",
+    "frontend:test": "npm run test --prefix frontend",
+    "frontend:test:e2e": "npm run test:e2e --prefix frontend",
+    "test": "npm run backend:test && npm run frontend:test",
+    "test:e2e": "npm run backend:test:e2e && npm run frontend:test:e2e",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "lint": "npm run lint --prefix backend && npm run lint --prefix frontend"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": [
+    "ideatracker",
+    "crowdsourcing",
+    "ideas",
+    "team-collaboration"
+  ],
+  "author": "",
+  "license": "MIT"
+}

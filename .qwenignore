@@ -1,0 +1,20 @@
+# Backend unit tests
+backend/src/**/*.spec.ts
+
+# Backend e2e tests
+backend/test/**/*.e2e-spec.ts
+
+# Frontend unit tests
+frontend/src/**/*.test.ts
+frontend/src/**/*.test.tsx
+
+# Frontend e2e tests
+frontend/e2e/**
+
+# Coverage
+backend/coverage
+frontend/coverage
+
+# Playwright
+frontend/playwright-report
+frontend/test-results
