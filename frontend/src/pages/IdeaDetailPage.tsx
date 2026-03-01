@@ -1,6 +1,6 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ideasService, ratingsService, commentsService } from '../services';
+import { ideasService, ratingsService, commentsService, teamsService } from '../services';
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
@@ -29,6 +29,12 @@ export default function IdeaDetailPage() {
   const { data: comments } = useQuery({
     queryKey: ['comments', id],
     queryFn: () => commentsService.getByIdea(id!),
+    enabled: !!id,
+  });
+
+  const { data: teams } = useQuery({
+    queryKey: ['ideaTeams', id],
+    queryFn: () => teamsService.findByIdea(id!),
     enabled: !!id,
   });
 
@@ -297,6 +303,45 @@ export default function IdeaDetailPage() {
               <span>Комментариев:</span>
               <strong>{comments?.length || 0}</strong>
             </div>
+          </div>
+        </div>
+
+        {/* Teams */}
+        <div className="card mt-4">
+          <div className="card-header d-flex justify-content-between align-items-center">
+            <h5 className="mb-0">Команды</h5>
+            <Link to="/create-team" className="btn btn-sm btn-primary">
+              + Создать
+            </Link>
+          </div>
+          <div className="card-body">
+            {teams && teams.length > 0 ? (
+              <div className="list-group list-group-flush">
+                {teams.map((team) => (
+                  <Link
+                    key={team.id}
+                    to={`/teams/${team.id}`}
+                    className="list-group-item list-group-item-action"
+                  >
+                    <div className="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 className="mb-1">{team.name}</h6>
+                        <small className="text-muted">
+                          Лидер: {team.leaderId}
+                        </small>
+                      </div>
+                      <span className={`badge bg-${team.status === 'active' ? 'success' : 'secondary'}`}>
+                        {team.status === 'active' ? 'Активна' : team.status}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted text-center mb-0">
+                Пока нет команд. Будьте первыми!
+              </p>
+            )}
           </div>
         </div>
       </div>

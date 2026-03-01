@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
+import { TeamsProvider } from './hooks/useTeams';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -8,6 +9,8 @@ import RegisterPage from './pages/RegisterPage';
 import IdeaDetailPage from './pages/IdeaDetailPage';
 import CreateIdeaPage from './pages/CreateIdeaPage';
 import ProfilePage from './pages/ProfilePage';
+import TeamDetailPage from './pages/TeamDetailPage';
+import CreateTeamPage from './pages/CreateTeamPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 // Layouts
@@ -34,6 +37,7 @@ function App() {
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
         <Route path="ideas/:id" element={<IdeaDetailPage />} />
+        <Route path="teams/:id" element={<TeamDetailPage />} />
         
         {/* Public routes */}
         <Route
@@ -55,10 +59,22 @@ function App() {
           }
         />
         <Route
+          path="create-team"
+          element={
+            <ProtectedRoute>
+              <TeamsProvider>
+                <CreateTeamPage />
+              </TeamsProvider>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="profile"
           element={
             <ProtectedRoute>
-              <ProfilePage />
+              <TeamsProvider>
+                <ProfilePage />
+              </TeamsProvider>
             </ProtectedRoute>
           }
         />
