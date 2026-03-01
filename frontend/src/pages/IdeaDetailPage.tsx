@@ -310,7 +310,7 @@ export default function IdeaDetailPage() {
         <div className="card mt-4">
           <div className="card-header d-flex justify-content-between align-items-center">
             <h5 className="mb-0">Команды</h5>
-            <Link to="/create-team" className="btn btn-sm btn-primary">
+            <Link to={`/create-team/${id}`} className="btn btn-sm btn-primary">
               + Создать
             </Link>
           </div>

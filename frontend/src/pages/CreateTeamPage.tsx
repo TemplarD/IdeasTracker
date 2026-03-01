@@ -1,19 +1,37 @@
-import { useState, FormEvent } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useState, FormEvent, useEffect } from 'react';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { teamsService } from '../services/teams.service';
+import { ideasService } from '../services/ideas.service';
 import toast from 'react-hot-toast';
 
 export default function CreateTeamPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const ideaId = new URLSearchParams(location.search).get('ideaId');
+  const { id: ideaIdFromParams } = useParams<{ id: string }>();
+  
+  // Получаем ideaId из URL параметров или из query string
+  const ideaId = ideaIdFromParams || new URLSearchParams(location.search).get('ideaId') || '';
   
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    ideaId: ideaId || '',
+    ideaId: ideaId,
   });
+
+  // Загружаем информацию об идее для отображения
+  const { data: idea } = useQuery({
+    queryKey: ['idea', ideaId],
+    queryFn: () => ideasService.getById(ideaId),
+    enabled: !!ideaId,
+  });
+
+  // Обновляем formData при изменении ideaId из URL
+  useEffect(() => {
+    if (ideaId) {
+      setFormData(prev => ({ ...prev, ideaId }));
+    }
+  }, [ideaId]);
 
   const createMutation = useMutation({
     mutationFn: teamsService.create,
@@ -76,19 +94,33 @@ export default function CreateTeamPage() {
                 <label htmlFor="ideaId" className="form-label">
                   Идея *
                 </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="ideaId"
-                  value={formData.ideaId}
-                  onChange={(e) =>
-                    setFormData({ ...formData, ideaId: e.target.value })
-                  }
-                  required
-                  placeholder="UUID идеи"
-                />
+                {idea ? (
+                  <div className="card bg-light">
+                    <div className="card-body py-2">
+                      <h6 className="mb-0">{idea.title}</h6>
+                      <input
+                        type="hidden"
+                        id="ideaId"
+                        value={idea.id}
+                        readOnly
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="ideaId"
+                    value={formData.ideaId}
+                    onChange={(e) =>
+                      setFormData({ ...formData, ideaId: e.target.value })
+                    }
+                    required
+                    placeholder="UUID идеи"
+                  />
+                )}
                 <small className="text-muted">
-                  ID идеи, для которой создается команда
+                  {idea ? 'Идея выбрана' : 'ID идеи, для которой создается команда'}
                 </small>
               </div>
 

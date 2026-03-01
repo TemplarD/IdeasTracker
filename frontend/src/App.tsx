@@ -69,6 +69,16 @@ function App() {
           }
         />
         <Route
+          path="create-team/:id"
+          element={
+            <ProtectedRoute>
+              <TeamsProvider>
+                <CreateTeamPage />
+              </TeamsProvider>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="profile"
           element={
             <ProtectedRoute>

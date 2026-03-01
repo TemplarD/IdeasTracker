@@ -1,18 +1,35 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ideasService } from '../services/ideas.service';
 import { IdeaStatus } from '../types';
 import { formatDistanceToNow } from '../utils/dateUtils';
 
 export default function HomePage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [page, setPage] = useState(1);
   const limit = 10;
+  
+  // Получаем фильтры из URL
+  const selectedTag = searchParams.get('tag') || '';
+  const selectedCategory = searchParams.get('category') || '';
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['ideas', page],
-    queryFn: () => ideasService.getAll({ page, limit }),
+    queryKey: ['ideas', page, selectedTag, selectedCategory],
+    queryFn: () => ideasService.getAll({ 
+      page, 
+      limit,
+      category: selectedCategory || undefined,
+    }),
   });
+  
+  // Фильтрация по тегам на клиенте
+  const filteredData = data && selectedTag
+    ? {
+        ...data,
+        data: data.data.filter(idea => idea.tags.includes(selectedTag)),
+      }
+    : data;
 
   const getStatusBadge = (status: IdeaStatus) => {
     const badges = {
@@ -36,6 +53,36 @@ export default function HomePage() {
     return labels[status];
   };
 
+  const handleTagClick = (tag: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    if (selectedTag === tag) {
+      // Снять фильтр
+      searchParams.delete('tag');
+    } else {
+      searchParams.set('tag', tag);
+    }
+    setSearchParams(searchParams);
+    setPage(1);
+  };
+
+  const handleCategoryClick = (category: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    if (selectedCategory === category) {
+      searchParams.delete('category');
+    } else {
+      searchParams.set('category', category);
+    }
+    setSearchParams(searchParams);
+    setPage(1);
+  };
+
+  const clearFilters = () => {
+    searchParams.delete('tag');
+    searchParams.delete('category');
+    setSearchParams(searchParams);
+    setPage(1);
+  };
+
   if (error) {
     return (
       <div className="alert alert-danger">
@@ -52,6 +99,42 @@ export default function HomePage() {
           + Создать идею
         </Link>
       </div>
+
+      {/* Active filters */}
+      {(selectedTag || selectedCategory) && (
+        <div className="alert alert-info d-flex align-items-center justify-content-between mb-3">
+          <div>
+            <strong>Фильтры:</strong>
+            {selectedTag && (
+              <span className="badge bg-primary ms-2">
+                Тег: {selectedTag}
+                <button
+                  className="btn-close btn-close-white ms-2"
+                  onClick={() => {
+                    searchParams.delete('tag');
+                    setSearchParams(searchParams);
+                  }}
+                ></button>
+              </span>
+            )}
+            {selectedCategory && (
+              <span className="badge bg-secondary ms-2">
+                Категория: {selectedCategory}
+                <button
+                  className="btn-close btn-close-white ms-2"
+                  onClick={() => {
+                    searchParams.delete('category');
+                    setSearchParams(searchParams);
+                  }}
+                ></button>
+              </span>
+            )}
+          </div>
+          <button className="btn btn-sm btn-outline-secondary" onClick={clearFilters}>
+            Сбросить
+          </button>
+        </div>
+      )}
 
       {isLoading ? (
         <div className="row">
@@ -94,15 +177,28 @@ export default function HomePage() {
                         <p className="card-title text-truncate-2 text-muted mb-3">
                           {idea.description}
                         </p>
-                        <div className="d-flex justify-content-between align-items-center">
-                          <div>
+                        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                          <div className="d-flex flex-wrap gap-1">
+                            {idea.category && (
+                              <button
+                                className="badge bg-info text-dark border-0 cursor-pointer"
+                                onClick={(e) => handleCategoryClick(idea.category!, e)}
+                                title={`Фильтр по категории: ${idea.category}`}
+                              >
+                                {idea.category}
+                              </button>
+                            )}
                             {idea.tags.slice(0, 3).map((tag) => (
-                              <span
+                              <button
                                 key={tag}
-                                className="badge bg-light text-dark me-1"
+                                className={`badge border-0 cursor-pointer ${
+                                  selectedTag === tag ? 'bg-primary' : 'bg-light text-dark'
+                                }`}
+                                onClick={(e) => handleTagClick(tag, e)}
+                                title={selectedTag === tag ? 'Снять фильтр' : `Фильтр по тегу: ${tag}`}
                               >
                                 {tag}
-                              </span>
+                              </button>
                             ))}
                           </div>
                           <div className="text-muted small">
