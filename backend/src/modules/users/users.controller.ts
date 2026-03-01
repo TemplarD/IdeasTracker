@@ -28,14 +28,14 @@ export class UsersController {
 
   @Get('me')
   @ApiOperation({ summary: 'Получить текущий профиль' })
-  async getProfile(@Request() req): Promise<UserResponseDto> {
+  async getProfile(@Request() req: any): Promise<UserResponseDto> {
     return this.usersService.findById(req.user.userId);
   }
 
   @Patch('me')
   @ApiOperation({ summary: 'Обновить профиль' })
   async updateProfile(
-    @Request() req,
+    @Request() req: any,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserResponseDto> {
     return this.usersService.update(req.user.userId, updateUserDto);

@@ -24,7 +24,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (token && storedUser) {
         try {
-          const userData = JSON.parse(storedUser);
           const profile = await authService.getProfile();
           setUser(profile);
         } catch (error) {

@@ -16,13 +16,13 @@ export class Rating {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ min: 1, max: 5 })
+  @Column()
   interest: number;
 
-  @Column({ min: 1, max: 5 })
+  @Column()
   benefit: number;
 
-  @Column({ min: 1, max: 5 })
+  @Column()
   profitability: number;
 
   @Column({ type: 'decimal', precision: 3, scale: 2 })

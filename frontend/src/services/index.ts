@@ -1,6 +1,9 @@
 import { api } from './api';
 import { IRating, IComment } from '../types';
 
+export * from './auth.service';
+export * from './ideas.service';
+
 export interface CreateRatingDto {
   interest: number;
   benefit: number;

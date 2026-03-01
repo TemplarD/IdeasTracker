@@ -24,7 +24,7 @@ export class CommentsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Добавить комментарий к идее' })
   async create(
-    @Request() req,
+    @Request() req: any,
     @Param('ideaId') ideaId: string,
     @Body() createCommentDto: CreateCommentDto,
   ) {
@@ -42,7 +42,7 @@ export class CommentsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Обновить комментарий' })
   async update(
-    @Request() req,
+    @Request() req: any,
     @Param('commentId') commentId: string,
     @Body() updateCommentDto: UpdateCommentDto,
   ) {
@@ -53,7 +53,7 @@ export class CommentsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Удалить комментарий' })
-  async remove(@Request() req, @Param('commentId') commentId: string) {
+  async remove(@Request() req: any, @Param('commentId') commentId: string) {
     await this.commentsService.remove(commentId, req.user.userId);
     return { message: 'Комментарий успешно удален' };
   }
@@ -63,7 +63,7 @@ export class CommentsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Проголосовать за комментарий' })
   async vote(
-    @Request() req,
+    @Request() req: any,
     @Param('commentId') commentId: string,
     @Body() voteCommentDto: VoteCommentDto,
   ) {

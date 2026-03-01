@@ -22,11 +22,11 @@ docker-compose down
 ```
 
 **После запуска:**
-- Frontend: http://localhost:3001
-- Backend API: http://localhost:3000
-- Swagger: http://localhost:3000/api/docs
-- PostgreSQL: localhost:5432
-- Redis: localhost:6379
+- Frontend: http://localhost:3021
+- Backend API: http://localhost:3020
+- Swagger: http://localhost:3020/api/docs
+- PostgreSQL: localhost:5452
+- Redis: localhost:6399
 
 ---
 
@@ -295,4 +295,4 @@ IdeaTracker/
 ## Контакты и поддержка
 
 - Документация: `/docs/API.md`
-- Swagger UI: http://localhost:3000/api/docs
+- Swagger UI: http://localhost:3020/api/docs

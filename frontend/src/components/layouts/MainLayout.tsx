@@ -1,8 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { Link, useNavigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
 
-export default function MainLayout({ children }: { children: React.ReactNode }) {
+export default function MainLayout() {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -82,7 +82,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
       {/* Main Content */}
       <main className="flex-grow-1 py-4">
-        <div className="container">{children}</div>
+        <div className="container">
+          <Outlet />
+        </div>
       </main>
 
       {/* Footer */}

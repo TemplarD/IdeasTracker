@@ -23,7 +23,7 @@ export class RatingsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Оценить идею' })
   async create(
-    @Request() req,
+    @Request() req: any,
     @Param('ideaId') ideaId: string,
     @Body() createRatingDto: CreateRatingDto,
   ) {
@@ -40,7 +40,7 @@ export class RatingsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Получить мою оценку идеи' })
-  async findMyRating(@Request() req, @Param('ideaId') ideaId: string) {
+  async findMyRating(@Request() req: any, @Param('ideaId') ideaId: string) {
     return this.ratingsService.findByUserAndIdea(req.user.userId, ideaId);
   }
 
@@ -49,7 +49,7 @@ export class RatingsController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Обновить оценку идеи' })
   async update(
-    @Request() req,
+    @Request() req: any,
     @Param('ideaId') ideaId: string,
     @Body() updateRatingDto: UpdateRatingDto,
   ) {

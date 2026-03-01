@@ -25,9 +25,9 @@ setup.bat   # Windows
 ```
 
 **После запуска:**
-- Frontend: http://localhost:3001
-- Backend API: http://localhost:3000
-- Swagger: http://localhost:3000/api/docs
+- Frontend: http://localhost:3021
+- Backend API: http://localhost:3020
+- Swagger: http://localhost:3020/api/docs
 
 📖 **Подробная инструкция:** [RUN.md](./RUN.md)
 

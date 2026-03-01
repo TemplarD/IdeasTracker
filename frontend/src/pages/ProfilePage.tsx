@@ -1,6 +1,6 @@
 import { useAuth } from '../hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
-import { ideasService } from '../services';
+import { ideasService } from '../services/ideas.service';
 import { formatDistanceToNow } from '../utils/dateUtils';
 
 export default function ProfilePage() {
@@ -72,7 +72,7 @@ export default function ProfilePage() {
               </p>
             ) : (
               <div className="list-group list-group-flush">
-                {myIdeas?.data.map((idea) => (
+                {myIdeas?.data.map((idea: any) => (
                   <a
                     key={idea.id}
                     href={`/ideas/${idea.id}`}

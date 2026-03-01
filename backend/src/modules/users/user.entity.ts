@@ -63,13 +63,13 @@ export class User {
   @Column({ nullable: true })
   refreshToken: string;
 
-  @OneToMany(() => Idea, (idea) => author, { cascade: true })
+  @OneToMany(() => Idea, (idea) => idea.author, { cascade: true })
   ideas: Idea[];
 
-  @OneToMany(() => Rating, (rating) => user)
+  @OneToMany(() => Rating, (rating) => rating.user)
   ratings: Rating[];
 
-  @OneToMany(() => Comment, (comment) => author)
+  @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
 
   @CreateDateColumn()

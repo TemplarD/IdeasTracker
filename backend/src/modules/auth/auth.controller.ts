@@ -35,7 +35,7 @@ export class AuthController {
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Выход из системы' })
-  async logout(@Request() req) {
+  async logout(@Request() req: any) {
     await this.authService.logout(req.user.userId);
     return { message: 'Успешный выход' };
   }
@@ -43,7 +43,7 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Обновить access token' })
-  async refreshTokens(@Request() req) {
+  async refreshTokens(@Request() req: any) {
     return this.authService.refreshTokens(req.user.userId, req.body.refreshToken);
   }
 }

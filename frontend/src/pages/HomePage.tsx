@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ideasService } from '../services/ideas.service';
-import { IIdea, IdeaStatus } from '../types';
+import { IdeaStatus } from '../types';
 import { formatDistanceToNow } from '../utils/dateUtils';
 
 export default function HomePage() {
@@ -21,13 +21,6 @@ export default function HomePage() {
       [IdeaStatus.IN_PROGRESS]: 'info',
       [IdeaStatus.IMPLEMENTED]: 'success',
       [IdeaStatus.CLOSED]: 'danger',
-    };
-    const labels = {
-      [IdeaStatus.DRAFT]: 'Черновик',
-      [IdeaStatus.PUBLISHED]: 'Опубликована',
-      [IdeaStatus.IN_PROGRESS]: 'В работе',
-      [IdeaStatus.IMPLEMENTED]: 'Реализована',
-      [IdeaStatus.CLOSED]: 'Закрыта',
     };
     return badges[status];
   };

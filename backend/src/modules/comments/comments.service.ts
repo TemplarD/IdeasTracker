@@ -127,7 +127,7 @@ export class CommentsService {
     });
 
     comments.forEach((comment) => {
-      const current = commentMap.get(comment.id);
+      const current = commentMap.get(comment.id)!;
       if (comment.parentId) {
         const parent = commentMap.get(comment.parentId);
         if (parent) {

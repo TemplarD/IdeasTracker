@@ -25,7 +25,7 @@ export class IdeasController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Создать новую идею' })
-  async create(@Request() req, @Body() createIdeaDto: CreateIdeaDto) {
+  async create(@Request() req: any, @Body() createIdeaDto: CreateIdeaDto) {
     return this.ideasService.create(createIdeaDto, req.user.userId);
   }
 
@@ -38,8 +38,8 @@ export class IdeasController {
   @ApiQuery({ name: 'sortBy', required: false, example: 'createdAt' })
   @ApiQuery({ name: 'sortOrder', required: false, example: 'DESC' })
   async findAll(
-    @Query('page') page = 1,
-    @Query('limit') limit = 10,
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '10',
     @Query('status') status?: IdeaStatus,
     @Query('category') category?: string,
     @Query('sortBy') sortBy?: string,
@@ -58,9 +58,9 @@ export class IdeasController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Получить мои идеи' })
   async findMyIdeas(
-    @Request() req,
-    @Query('page') page = 1,
-    @Query('limit') limit = 10,
+    @Request() req: any,
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '10',
   ) {
     return this.ideasService.findByAuthor(req.user.userId, parseInt(page), parseInt(limit));
   }
@@ -76,7 +76,7 @@ export class IdeasController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Обновить идею' })
   async update(
-    @Request() req,
+    @Request() req: any,
     @Param('id') id: string,
     @Body() updateIdeaDto: UpdateIdeaDto,
   ) {
@@ -87,7 +87,7 @@ export class IdeasController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Удалить идею' })
-  async remove(@Request() req, @Param('id') id: string) {
+  async remove(@Request() req: any, @Param('id') id: string) {
     await this.ideasService.remove(id, req.user.userId);
     return { message: 'Идея успешно удалена' };
   }

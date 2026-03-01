@@ -102,7 +102,7 @@ export default function IdeaDetailPage() {
                 ⭐ {idea.averageRating.toFixed(1)}
               </span>
               <span className="badge bg-secondary">👁 {idea.viewsCount}</span>
-              {idea.tags.map((tag) => (
+              {idea.tags.map((tag: string) => (
                 <span key={tag} className="badge bg-light text-dark">
                   {tag}
                 </span>
