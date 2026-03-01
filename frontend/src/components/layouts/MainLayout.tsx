@@ -45,28 +45,15 @@ export default function MainLayout() {
                         Создать идею
                       </Link>
                     </li>
-                    <li className="nav-item dropdown">
-                      <Link
-                        className="nav-link dropdown-toggle"
-                        to="#"
-                        id="navbarDropdown"
-                        role="button"
-                        data-bs-toggle="dropdown"
-                      >
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/profile">
                         Профиль
                       </Link>
-                      <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li>
-                          <Link className="dropdown-item" to="/profile">
-                            Мой профиль
-                          </Link>
-                        </li>
-                        <li>
-                          <Link className="dropdown-item" to="/investor-profile">
-                            Инвестор
-                          </Link>
-                        </li>
-                      </ul>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/investor-profile">
+                        Инвестор
+                      </Link>
                     </li>
                   </>
                 )}
