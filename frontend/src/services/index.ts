@@ -3,6 +3,7 @@ import { IRating, IComment } from '../types';
 
 export * from './auth.service';
 export * from './ideas.service';
+export * from './teams.service';
 
 export interface CreateRatingDto {
   interest: number;
