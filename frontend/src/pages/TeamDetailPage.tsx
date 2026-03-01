@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { teamsService } from '../services/teams.service';
 import { ideasService } from '../services/ideas.service';
@@ -10,6 +10,7 @@ import { formatDistanceToNow } from '../utils/dateUtils';
 export default function TeamDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [progressText, setProgressText] = useState('');
 
@@ -90,6 +91,12 @@ export default function TeamDetailPage() {
 
   return (
     <div className="row">
+      <div className="col-12 mb-3">
+        <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
+          ← Назад
+        </button>
+      </div>
+
       <div className="col-lg-8">
         {/* Team Info */}
         <div className="card mb-4">
@@ -107,9 +114,13 @@ export default function TeamDetailPage() {
 
             <div className="mb-3">
               <strong>Идея:</strong>{' '}
-              <Link to={`/ideas/${team.ideaId}`}>
-                {idea?.title || 'Загрузка...'}
-              </Link>
+              {idea ? (
+                <Link to={`/ideas/${team.ideaId}`} className="text-primary">
+                  {idea.title}
+                </Link>
+              ) : (
+                <span className="text-muted">Загрузка...</span>
+              )}
             </div>
 
             <div className="text-muted">
