@@ -24,7 +24,7 @@ export class TeamMembersController {
   @Post()
   @ApiOperation({ summary: 'Подать заявку на вступление в команду' })
   async joinTeam(
-    @Request() req,
+    @Request() req: any,
     @Param('teamId') teamId: string,
     @Body() joinTeamDto: JoinTeamDto,
   ) {
@@ -46,7 +46,7 @@ export class TeamMembersController {
   @Patch(':memberId/status')
   @ApiOperation({ summary: 'Обновить статус участника (лидер)' })
   async updateStatus(
-    @Request() req,
+    @Request() req: any,
     @Param('teamId') teamId: string,
     @Param('memberId') memberId: string,
     @Body() updateDto: UpdateMemberStatusDto,
@@ -61,7 +61,7 @@ export class TeamMembersController {
 
   @Delete('leave')
   @ApiOperation({ summary: 'Покинуть команду' })
-  async leaveTeam(@Request() req, @Param('teamId') teamId: string) {
+  async leaveTeam(@Request() req: any, @Param('teamId') teamId: string) {
     await this.membersService.leaveTeam(teamId, req.user.userId);
     return { message: 'Вы покинули команду' };
   }

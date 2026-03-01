@@ -1,10 +1,11 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ideasService, ratingsService, commentsService, teamsService } from '../services';
+import { ideasService, ratingsService, commentsService, teamsService, investorsService } from '../services';
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
 import { formatDistanceToNow } from '../utils/dateUtils';
+import { InvestmentStatus } from '../types/investors';
 
 export default function IdeaDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -35,6 +36,12 @@ export default function IdeaDetailPage() {
   const { data: teams } = useQuery({
     queryKey: ['ideaTeams', id],
     queryFn: () => teamsService.findByIdea(id!),
+    enabled: !!id,
+  });
+
+  const { data: investments } = useQuery({
+    queryKey: ['ideaInvestments', id],
+    queryFn: () => investorsService.getByIdea(id!),
     enabled: !!id,
   });
 
@@ -340,6 +347,55 @@ export default function IdeaDetailPage() {
             ) : (
               <p className="text-muted text-center mb-0">
                 Пока нет команд. Будьте первыми!
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Investments */}
+        <div className="card mt-4">
+          <div className="card-header d-flex justify-content-between align-items-center">
+            <h5 className="mb-0">Инвестиции</h5>
+            <Link to={`/create-investment/${id}`} className="btn btn-sm btn-success">
+              $ Предложить
+            </Link>
+          </div>
+          <div className="card-body">
+            {investments && investments.length > 0 ? (
+              <div className="list-group list-group-flush">
+                {investments.map((inv) => (
+                  <div key={inv.id} className="list-group-item">
+                    <div className="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h6 className="mb-1 text-success">
+                          ${inv.amount.toLocaleString()}
+                        </h6>
+                        <small className="text-muted">
+                          {inv.sharePercent && `Доля: ${inv.sharePercent}%`}
+                          {inv.authorPercent && `, автору: ${inv.authorPercent}%`}
+                        </small>
+                      </div>
+                      <span className={`badge bg-${
+                        inv.status === 'completed' ? 'success' :
+                        inv.status === 'proposed' ? 'info' :
+                        inv.status === 'discussion' ? 'warning' :
+                        inv.status === 'agreed' ? 'primary' : 'secondary'
+                      }`}>
+                        {inv.status === 'completed' ? 'Завершено' :
+                         inv.status === 'proposed' ? 'Предложено' :
+                         inv.status === 'discussion' ? 'Обсуждение' :
+                         inv.status === 'agreed' ? 'Согласовано' : inv.status}
+                      </span>
+                    </div>
+                    <small className="text-muted">
+                      {new Date(inv.createdAt).toLocaleDateString()}
+                    </small>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted text-center mb-0">
+                Пока нет инвестиционных заявок
               </p>
             )}
           </div>

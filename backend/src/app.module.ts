@@ -10,6 +10,8 @@ import { RatingsModule } from './modules/ratings/ratings.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { TeamsModule } from './modules/teams/teams.module';
 import { ProgressModule } from './modules/progress/progress.module';
+import { InvestorProfilesModule } from './modules/investors/investor-profiles.module';
+import { InvestmentsModule } from './modules/investments/investments.module';
 
 // Entities
 import { User } from './modules/users/user.entity';
@@ -19,6 +21,8 @@ import { Comment } from './modules/comments/comment.entity';
 import { Team } from './modules/teams/team.entity';
 import { TeamMember } from './modules/teams/team-member.entity';
 import { Progress } from './modules/progress/progress.entity';
+import { InvestorProfile } from './modules/investors/investor-profile.entity';
+import { Investment } from './modules/investments/investment.entity';
 
 @Module({
   imports: [
@@ -33,7 +37,7 @@ import { Progress } from './modules/progress/progress.entity';
       username: process.env.DB_USER || 'ideatracker',
       password: process.env.DB_PASSWORD || 'ideatracker123',
       database: process.env.DB_NAME || 'ideatracker',
-      entities: [User, Idea, Rating, Comment, Team, TeamMember, Progress],
+      entities: [User, Idea, Rating, Comment, Team, TeamMember, Progress, InvestorProfile, Investment],
       synchronize: process.env.NODE_ENV === 'development',
       logging: process.env.NODE_ENV === 'development',
     }),
@@ -44,6 +48,8 @@ import { Progress } from './modules/progress/progress.entity';
     CommentsModule,
     TeamsModule,
     ProgressModule,
+    InvestorProfilesModule,
+    InvestmentsModule,
   ],
 })
 export class AppModule {}

@@ -23,7 +23,7 @@ export class ProgressController {
   @Post()
   @ApiOperation({ summary: 'Добавить запись о прогрессе' })
   async create(
-    @Request() req,
+    @Request() req: any,
     @Param('teamId') teamId: string,
     @Body() createProgressDto: CreateProgressDto,
   ) {
@@ -39,7 +39,7 @@ export class ProgressController {
   @Delete(':progressId')
   @ApiOperation({ summary: 'Удалить запись о прогрессе' })
   async remove(
-    @Request() req,
+    @Request() req: any,
     @Param('teamId') teamId: string,
     @Param('progressId') progressId: string,
   ) {

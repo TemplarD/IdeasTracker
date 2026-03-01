@@ -11,6 +11,8 @@ import CreateIdeaPage from './pages/CreateIdeaPage';
 import ProfilePage from './pages/ProfilePage';
 import TeamDetailPage from './pages/TeamDetailPage';
 import CreateTeamPage from './pages/CreateTeamPage';
+import CreateInvestmentPage from './pages/CreateInvestmentPage';
+import InvestorProfilePage from './pages/InvestorProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
 
 // Layouts
@@ -85,6 +87,30 @@ function App() {
               <TeamsProvider>
                 <ProfilePage />
               </TeamsProvider>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="investor-profile"
+          element={
+            <ProtectedRoute>
+              <InvestorProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="create-investment"
+          element={
+            <ProtectedRoute>
+              <CreateInvestmentPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="create-investment/:ideaId"
+          element={
+            <ProtectedRoute>
+              <CreateInvestmentPage />
             </ProtectedRoute>
           }
         />

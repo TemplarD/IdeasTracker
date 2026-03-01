@@ -23,7 +23,7 @@ export class TeamsController {
 
   @Post()
   @ApiOperation({ summary: 'Создать новую команду' })
-  async create(@Request() req, @Body() createTeamDto: CreateTeamDto) {
+  async create(@Request() req: any, @Body() createTeamDto: CreateTeamDto) {
     return this.teamsService.create(createTeamDto, req.user.userId);
   }
 
@@ -35,7 +35,7 @@ export class TeamsController {
 
   @Get('my')
   @ApiOperation({ summary: 'Получить мои команды' })
-  async findMyTeams(@Request() req) {
+  async findMyTeams(@Request() req: any) {
     return this.teamsService.findByUser(req.user.userId);
   }
 
@@ -48,7 +48,7 @@ export class TeamsController {
   @Patch(':id')
   @ApiOperation({ summary: 'Обновить команду' })
   async update(
-    @Request() req,
+    @Request() req: any,
     @Param('id') id: string,
     @Body() updateTeamDto: UpdateTeamDto,
   ) {
@@ -57,7 +57,7 @@ export class TeamsController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Удалить команду' })
-  async remove(@Request() req, @Param('id') id: string) {
+  async remove(@Request() req: any, @Param('id') id: string) {
     await this.teamsService.remove(id, req.user.userId);
     return { message: 'Команда успешно удалена' };
   }
