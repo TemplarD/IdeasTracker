@@ -4,13 +4,22 @@ import { Repository } from 'typeorm';
 import { Investment, InvestmentStatus } from './investment.entity';
 import { CreateInvestmentDto, UpdateInvestmentDto, InvestmentResponseDto } from './investment.dto';
 import { InvestorProfilesService } from '../investors/investor-profiles.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationType } from '../notifications/notification.entity';
+import { Idea } from '../ideas/idea.entity';
+import { User } from '../users/user.entity';
 
 @Injectable()
 export class InvestmentsService {
   constructor(
     @InjectRepository(Investment)
     private investmentsRepository: Repository<Investment>,
+    @InjectRepository(Idea)
+    private ideasRepository: Repository<Idea>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
     private investorProfilesService: InvestorProfilesService,
+    private notificationsService: NotificationsService,
   ) {}
 
   async create(
@@ -27,6 +36,25 @@ export class InvestmentsService {
     });
 
     await this.investmentsRepository.save(investment);
+
+    // Создаём уведомление для автора идеи
+    if (createDto.ideaId) {
+      const idea = await this.ideasRepository.findOne({
+        where: { id: createDto.ideaId },
+        relations: ['author'],
+      });
+
+      if (idea && idea.author) {
+        await this.notificationsService.create(
+          idea.author.id,
+          NotificationType.INVESTMENT_PROPOSED,
+          'Новая заявка на инвестирование',
+          `Инвестор предложил $${createDto.amount} для вашей идеи "${idea.title}"`,
+          investment.id,
+        );
+      }
+    }
+
     return this.toResponse(investment);
   }
 

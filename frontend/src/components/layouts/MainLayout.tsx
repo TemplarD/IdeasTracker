@@ -6,6 +6,13 @@ export default function MainLayout() {
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const { data: unreadCount } = useQuery({
+    queryKey: ['unreadCount'],
+    queryFn: notificationsService.getUnreadCount,
+    enabled: isAuthenticated,
+    refetchInterval: 30000, // Refresh every 30 seconds
+  });
+
   const handleLogout = async () => {
     await logout();
     toast.success('Вы успешно вышли');
@@ -60,6 +67,16 @@ export default function MainLayout() {
               </ul>
 
               <div className="d-flex align-items-center gap-3">
+                {isAuthenticated && (
+                  <Link to="/notifications" className="position-relative text-dark">
+                    🔔
+                    {unreadCount && unreadCount > 0 && (
+                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style={{ fontSize: '0.6rem' }}>
+                        {unreadCount > 99 ? '99+' : unreadCount}
+                      </span>
+                    )}
+                  </Link>
+                )}
                 {isAuthenticated ? (
                   <>
                     <span className="text-muted">

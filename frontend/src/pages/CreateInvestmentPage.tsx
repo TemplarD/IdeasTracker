@@ -1,6 +1,6 @@
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { investorsService } from '../services/investors.service';
 import toast from 'react-hot-toast';
 
@@ -20,6 +20,12 @@ export default function CreateInvestmentPage() {
     comment: '',
   });
 
+  // Проверка профиля инвестора
+  const { data: investorProfile, isLoading: profileLoading } = useQuery({
+    queryKey: ['investorProfile'],
+    queryFn: investorsService.getMyProfile,
+  });
+
   const createMutation = useMutation({
     mutationFn: (data: any) => investorsService.createInvestment({
       ...data,
@@ -28,12 +34,34 @@ export default function CreateInvestmentPage() {
     }),
     onSuccess: () => {
       toast.success('Заявка на инвестирование создана');
-      navigate('/profile');
+      navigate('/investor-profile');
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Ошибка создания заявки');
     },
   });
+
+  // Redirect если нет профиля
+  useEffect(() => {
+    if (!profileLoading && !investorProfile) {
+      toast.error('Сначала создайте профиль инвестора');
+      navigate('/investor-profile');
+    }
+  }, [investorProfile, profileLoading, navigate]);
+
+  if (profileLoading) {
+    return (
+      <div className="d-flex justify-content-center py-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Загрузка...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!investorProfile) {
+    return null; // Will redirect via useEffect
+  }
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

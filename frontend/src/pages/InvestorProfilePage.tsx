@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { investorsService } from '../services/investors.service';
 import { useAuth } from '../hooks/useAuth';
 import toast from 'react-hot-toast';
@@ -9,6 +9,7 @@ import { InvestmentStatus } from '../types/investors';
 export default function InvestorProfilePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     budget: '',
@@ -17,15 +18,30 @@ export default function InvestorProfilePage() {
     preferredCategories: '',
   });
 
-  const { data: profile, isLoading } = useQuery({
+  const { data: profile, isLoading, refetch } = useQuery({
     queryKey: ['investorProfile'],
     queryFn: investorsService.getMyProfile,
+  });
+
+  const createMutation = useMutation({
+    mutationFn: investorsService.createProfile,
+    onSuccess: () => {
+      toast.success('Профиль инвестора создан');
+      queryClient.invalidateQueries({ queryKey: ['investorProfile'] });
+      refetch();
+      setIsEditing(false);
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || 'Ошибка');
+    },
   });
 
   const updateMutation = useMutation({
     mutationFn: investorsService.updateProfile,
     onSuccess: () => {
       toast.success('Профиль обновлён');
+      queryClient.invalidateQueries({ queryKey: ['investorProfile'] });
+      refetch();
       setIsEditing(false);
     },
     onError: (error: any) => {
@@ -40,12 +56,23 @@ export default function InvestorProfilePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    updateMutation.mutate({
-      budget: formData.budget ? parseFloat(formData.budget) : undefined,
-      bio: formData.bio || undefined,
-      interests: formData.interests.split(',').map(s => s.trim()).filter(Boolean) || undefined,
-      preferredCategories: formData.preferredCategories.split(',').map(s => s.trim()).filter(Boolean) || undefined,
-    });
+    if (profile) {
+      // Update existing profile
+      updateMutation.mutate({
+        budget: formData.budget ? parseFloat(formData.budget) : undefined,
+        bio: formData.bio || undefined,
+        interests: formData.interests.split(',').map(s => s.trim()).filter(Boolean) || undefined,
+        preferredCategories: formData.preferredCategories.split(',').map(s => s.trim()).filter(Boolean) || undefined,
+      });
+    } else {
+      // Create new profile
+      createMutation.mutate({
+        budget: formData.budget ? parseFloat(formData.budget) : undefined,
+        bio: formData.bio || undefined,
+        interests: formData.interests.split(',').map(s => s.trim()).filter(Boolean) || undefined,
+        preferredCategories: formData.preferredCategories.split(',').map(s => s.trim()).filter(Boolean) || undefined,
+      });
+    }
   };
 
   const getStatusBadge = (status: InvestmentStatus) => {

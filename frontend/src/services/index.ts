@@ -5,6 +5,7 @@ export * from './auth.service';
 export * from './ideas.service';
 export * from './teams.service';
 export * from './investors.service';
+export * from './notifications.service';
 
 export interface CreateRatingDto {
   interest: number;

@@ -13,6 +13,7 @@ import TeamDetailPage from './pages/TeamDetailPage';
 import CreateTeamPage from './pages/CreateTeamPage';
 import CreateInvestmentPage from './pages/CreateInvestmentPage';
 import InvestorProfilePage from './pages/InvestorProfilePage';
+import NotificationsPage from './pages/NotificationsPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 // Layouts
@@ -89,6 +90,14 @@ function App() {
           element={
             <ProtectedRoute>
               <InvestorProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="notifications"
+          element={
+            <ProtectedRoute>
+              <NotificationsPage />
             </ProtectedRoute>
           }
         />
