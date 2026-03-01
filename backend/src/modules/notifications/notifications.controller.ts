@@ -22,7 +22,7 @@ export class NotificationsController {
   @ApiOperation({ summary: 'Получить мои уведомления' })
   @ApiQuery({ name: 'unreadOnly', required: false, example: false })
   async getNotifications(
-    @Request() req,
+    @Request() req: any,
     @Query('unreadOnly') unreadOnly?: string,
   ) {
     return this.notificationsService.findByUser(
@@ -33,21 +33,21 @@ export class NotificationsController {
 
   @Get('unread-count')
   @ApiOperation({ summary: 'Получить количество непрочитанных' })
-  async getUnreadCount(@Request() req) {
+  async getUnreadCount(@Request() req: any) {
     const count = await this.notificationsService.getUnreadCount(req.user.userId);
     return { count };
   }
 
   @Post(':id/read')
   @ApiOperation({ summary: 'Отметить как прочитанное' })
-  async markAsRead(@Request() req, @Param('id') id: string) {
+  async markAsRead(@Request() req: any, @Param('id') id: string) {
     await this.notificationsService.markAsRead(id, req.user.userId);
     return { message: 'Отмечено как прочитанное' };
   }
 
   @Post('read-all')
   @ApiOperation({ summary: 'Отметить все как прочитанные' })
-  async markAllAsRead(@Request() req) {
+  async markAllAsRead(@Request() req: any) {
     await this.notificationsService.markAllAsRead(req.user.userId);
     return { message: 'Все отмечено как прочитанное' };
   }
