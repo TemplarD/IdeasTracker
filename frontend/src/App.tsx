@@ -64,9 +64,7 @@ function App() {
           path="create-team"
           element={
             <ProtectedRoute>
-              <TeamsProvider>
-                <CreateTeamPage />
-              </TeamsProvider>
+              <CreateTeamPage />
             </ProtectedRoute>
           }
         />
@@ -74,9 +72,7 @@ function App() {
           path="create-team/:id"
           element={
             <ProtectedRoute>
-              <TeamsProvider>
-                <CreateTeamPage />
-              </TeamsProvider>
+              <CreateTeamPage />
             </ProtectedRoute>
           }
         />
@@ -84,9 +80,7 @@ function App() {
           path="profile"
           element={
             <ProtectedRoute>
-              <TeamsProvider>
-                <ProfilePage />
-              </TeamsProvider>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />
