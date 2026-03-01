@@ -1,5 +1,7 @@
 import { Link, useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import { notificationsService } from '../../services/notifications.service';
 import toast from 'react-hot-toast';
 
 export default function MainLayout() {
